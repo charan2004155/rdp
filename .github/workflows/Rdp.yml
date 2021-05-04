@@ -1,4 +1,4 @@
-name: RDP-Windows
+name: RDP-VPS
 
 on: workflow_dispatch
 
@@ -17,13 +17,14 @@ jobs:
       run: | 
         copy nssm.exe C:\Windows\System32
         copy ngrok.exe C:\Windows\System32
-      - name: Connect your NGROK account
-      run: .\ngrok.exe authtoken 1s2JM69JogbqSWa0qPLTYK3vSiJ_2P5wGAixJ7LaVuyAAbRJy
-      
+    - name: Connect your NGROK account
+      run: .\ngrok.exe authtoken $Env:NGROK_AUTH_TOKEN
+      env:
+        NGROK_AUTH_TOKEN: ${{ secrets.NGROK_AUTH_TOKEN }}
     - name: Download Important Files.
       run: |
         Invoke-WebRequest https://drive.google.com/uc?id=1REWL1Vhd88bDBOSsXvV0OTdYAkcIgGXH  -OutFile NGROK-AP.bat
-        Invoke-WebRequest https://drive.google.com/uc?id=1glLBT3jp5uGD_0lmE20kiWyr84v79w0F  -OutFile NGROK-CHECK.bat
+        Invoke-WebRequest https://drive.google.com/uc?id=1srQWGo4U1L-c1TuZP8Fm0AgDtlNZQ2IX  -OutFile NGROK-CHECK.bat
         Invoke-WebRequest https://drive.google.com/uc?id=1FhT889-R8wIQ5LqYRyGDQO6rLr9w8Ox3  -OutFile loop.bat
     - name: Make YML file for NGROK.
       run: start NGROK-AP.bat
